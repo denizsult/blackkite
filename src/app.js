@@ -77,8 +77,7 @@ function initializeApp(rootNode) {
 
     if (frameworkControlsData[framework.id]) {
       if (!currentDataTable) {
-        currentDataTable = DataTable(frameworkControls);
-        currentDataTable.init();
+        currentDataTable = new DataTable(frameworkControls);
         console.log("currentDataTable :>> ", currentDataTable);
       }
       currentDataTable.loadData(frameworkControlsData[framework.id]);

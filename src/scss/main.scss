@@ -1,7 +1,7 @@
 @import './variables.scss';
 @import './components.scss';
 @import '../components/Modal/modal.scss';
-@import '../components/Datatable/datatable.scss';
+@import '../components/Datatable/style.scss';
 @import '../components/FrameworkCard/frameworkcard.scss';
 
 * {
@@ -293,7 +293,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 24px;
+ 
   overflow: hidden;
 
   .detail-header {
@@ -305,6 +305,7 @@ body {
   }
 
   &.empty {
+     padding: 24px;
     align-items: center;
     justify-content: center;
     text-align: center;
