@@ -18,8 +18,8 @@ async function App() {
               <div class="frameworks-grid" id="frameworks-grid"></div>
             </div>
           </div>
-
-           ${EmptyFrameworkState()}
+  
+           ${EmptyFrameworkState('empty')}
         </div>
       </main>
     </div>
@@ -87,7 +87,9 @@ function initializeApp(rootNode) {
 
   // Update detail panel
   function updateDetailPanel(framework, rootNode) {
-    const detailPanel = rootNode.querySelector(".detail-panel");
+    const detailPanel = rootNode.querySelector(".empty-framework-state");
+
+    detailPanel.classList.remove("empty");
 
     detailPanel.innerHTML = `
       <div id="framework-controls" class="framework-controls"></div>

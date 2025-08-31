@@ -2,27 +2,112 @@
 export const frameworkControlsData = {
   1: {
     data: [
-      { controlId: "ECF-001", category: "Access Control", description: "Company and Supplier may Process the other's BCI wherever they do business in connection with Supplier's delivery of Services and Deliverables." },
-      { controlId: "ECF-002", category: "Data Protection", description: "Encrypt sensitive data at rest" },
-      { controlId: "ECF-003", category: "Network Security", description: "Configure firewall rules" },
-      { controlId: "ECF-004", category: "Monitoring", description: "Set up security event logging" },
-      { controlId: "ECF-005", category: "Incident Response", description: "Develop incident response plan" }
-    ]
+      {
+        controlId: "ECF-001",
+        category: "Access Control",
+        description:
+          "Company and Supplier may Process the other's BCI wherever they do business in connection with Supplier's delivery of Services and Deliverables.",
+      },
+      {
+        controlId: "ECF-002",
+        category: "Data Protection",
+        description: "Encrypt sensitive data at rest",
+      },
+      {
+        controlId: "ECF-003",
+        category: "Network Security",
+        description: "Configure firewall rules",
+      },
+      {
+        controlId: "ECF-004",
+        category: "Monitoring",
+        description: "Set up security event logging",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+      {
+        controlId: "ECF-005",
+        category: "Incident Response",
+        description: "Develop incident response plan",
+      },
+    ],
   },
   2: {
     data: [
-      { controlId: "CSH-001", category: "Authentication", description: "Multi-factor authentication" },
-      { controlId: "CSH-002", category: "Authorization", description: "Role-based access control" },
-      { controlId: "CSH-003", category: "Data Security", description: "Data classification system" }
-    ]
+      {
+        controlId: "CSH-001",
+        category: "Authentication",
+        description: "Multi-factor authentication",
+      },
+      {
+        controlId: "CSH-002",
+        category: "Authorization",
+        description: "Role-based access control",
+      },
+      {
+        controlId: "CSH-003",
+        category: "Data Security",
+        description: "Data classification system",
+      },
+    ],
   },
   3: {
     data: [
-      { controlId: "DCF-001", category: "Physical Security", description: "Secure facility access" },
-      { controlId: "DCF-002", category: "Asset Management", description: "Asset inventory system" },
-      { controlId: "DCF-003", category: "Business Continuity", description: "Disaster recovery plan" }
-    ]
-  }
+      {
+        controlId: "DCF-001",
+        category: "Physical Security",
+        description: "Secure facility access",
+      },
+      {
+        controlId: "DCF-002",
+        category: "Asset Management",
+        description: "Asset inventory system",
+      },
+      {
+        controlId: "DCF-003",
+        category: "Business Continuity",
+        description: "Disaster recovery plan",
+      },
+    ],
+  },
 };
 
 // Framework data

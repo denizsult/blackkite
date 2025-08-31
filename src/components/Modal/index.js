@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+ 
 import { Modal as BootstrapModal } from 'bootstrap';
 
 const Modal = () => {
