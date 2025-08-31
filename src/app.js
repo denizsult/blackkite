@@ -2,41 +2,16 @@ import Modal from "./components/Modal";
 import DataTable from "./components/Datatable";
 import FrameworkCard from "./components/FrameworkCard";
 import { frameworksData, frameworkControlsData } from "./data/frameworks";
+import EmptyFrameworkState from "./components/EmptyFrameworkState";
+import { Header } from "./components/Header";
 
 async function App() {
   const template = document.createElement("template");
 
   template.innerHTML = `
     <div class="app">
-      <header class="header"></header>
-
-      <main class="main">
-        <div class="main-header">
-          <div class="header-left">
-            <img class="avatar" src="/assets/images/info-avatars.svg" alt="Info avatars" />
-            <div class="header-content">
-              <h1 class="page-title">Compliance Frameworks</h1>
-              <nav class="breadcrumb">
-                <a href="#" class="breadcrumb-link">Admin</a>
-                <span class="breadcrumb-separator">></span>
-                <span class="breadcrumb-current">Compliance Frameworks</span>
-              </nav>
-            </div>
-          </div>
-
-          <div class="header-actions">
-            <button class="btn btn-help">
-              <img class="btn-icon" src="/assets/images/frame-1013-1.svg" alt="Help icon" />
-              <span>Help</span>
-            </button>
-            <button class="btn btn-primary">
-              <img class="btn-icon" src="/assets/images/frame-1013.svg" alt="Add icon" />
-              <span>New Custom Framework</span>
-              <div class="btn-badge">1/3</div>
-            </button>
-          </div>
-        </div>
-
+      <main class="main" id="main-container">
+       ${Header()}
         <div class="content-area">
           <div class="frameworks-list">
             <div class="scroll-area">
@@ -44,18 +19,9 @@ async function App() {
             </div>
           </div>
 
-          <div class="detail-panel">
-            <img class="detail-icon" src="/assets/images/icon-format-list.svg" alt="Icon format list" />
-            <div class="detail-text">
-              Please select framework from list in left side.
-              <br />
-              or <span class="highlight">click here</span> to add new framework
-            </div>
-          </div>
+           ${EmptyFrameworkState()}
         </div>
       </main>
-
-      <footer class="footer"></footer>
     </div>
   `;
 
@@ -63,57 +29,57 @@ async function App() {
 
   // Initialize immediately since main.js already handles DOMContentLoaded
   initializeApp(node);
-  
+
   return node;
 }
 
 function initializeApp(rootNode) {
-  const frameworksGrid = rootNode.querySelector("#frameworks-grid");
+  const mainContainerDOM = rootNode.querySelector("#main-container");
+  const frameworksListDOM = rootNode.querySelector("#frameworks-grid");
   // Remove 'new' - just call the function
   const modal = Modal();
   let currentDataTable = null;
-  
 
-      // Render frameworks
-   frameworksData.forEach((framework) => {
+  // Render frameworks
+  frameworksData.forEach((framework) => {
     const card = FrameworkCard(framework);
     const cardElement = card.render(null, selectFramework);
-    frameworksGrid.appendChild(cardElement);
+    frameworksListDOM.appendChild(cardElement);
   });
 
   // Framework selection handler
   function selectFramework(framework) {
-
- 
     // Remove active state from all cards
-    frameworksGrid.querySelectorAll(".framework-card").forEach((card) => {
+    frameworksListDOM.querySelectorAll(".framework-card").forEach((card) => {
       card.classList.remove("selected");
     });
 
     // Add active state to selected card
-    const selectedCard = frameworksGrid.querySelector(
+    const selectedCard = frameworksListDOM.querySelector(
       `[data-framework-id="${framework.id}"]`
     );
-
-    console.log('selectedCard :>> ', selectedCard);
 
     if (selectedCard) {
       selectedCard.classList.add("selected");
     }
 
-    // Update detail panel
-    updateDetailPanel(framework, frameworksGrid);
+    updateDetailPanel(framework, mainContainerDOM);
 
     // Initialize or update DataTable
-    const frameworkControls = frameworksGrid.querySelector("#framework-controls");
+    const frameworkControls = mainContainerDOM.querySelector(
+      "#framework-controls"
+    );
 
-    if (currentDataTable) {
+    if (!!currentDataTable) {
       currentDataTable.clear();
+      currentDataTable = null;
     }
 
     if (frameworkControlsData[framework.id]) {
       if (!currentDataTable) {
-        currentDataTable = new DataTable(frameworkControls);
+        currentDataTable = DataTable(frameworkControls);
+        currentDataTable.init();
+        console.log("currentDataTable :>> ", currentDataTable);
       }
       currentDataTable.loadData(frameworkControlsData[framework.id]);
     }
@@ -128,12 +94,11 @@ function initializeApp(rootNode) {
     `;
   }
 
- 
-  rootNode.querySelector(".btn-primary").addEventListener("click", () => {
-    modal.open();
-  });
-
- 
+  rootNode
+    .querySelector("#open-create-framework-modal")
+    .addEventListener("click", () => {
+      modal.open();
+    });
 
   // Listen for new framework events
   window.addEventListener("addFramework", (e) => {
@@ -142,7 +107,7 @@ function initializeApp(rootNode) {
 
     const card = FrameworkCard(newFramework);
     const cardElement = card.render(null, selectFramework);
-    frameworksGrid.appendChild(cardElement);
+    frameworksListDOM.appendChild(cardElement);
 
     selectFramework(newFramework);
   });

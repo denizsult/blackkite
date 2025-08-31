@@ -2,7 +2,7 @@
 export const frameworkControlsData = {
   1: {
     data: [
-      { controlId: "ECF-001", category: "Access Control", description: "Implement strong password policies" },
+      { controlId: "ECF-001", category: "Access Control", description: "Company and Supplier may Process the other's BCI wherever they do business in connection with Supplier's delivery of Services and Deliverables." },
       { controlId: "ECF-002", category: "Data Protection", description: "Encrypt sensitive data at rest" },
       { controlId: "ECF-003", category: "Network Security", description: "Configure firewall rules" },
       { controlId: "ECF-004", category: "Monitoring", description: "Set up security event logging" },

@@ -3,10 +3,10 @@ const Datatable = (container) => {
   let filteredData = null;
   let currentPage = 1;
   let pageSize = 10;
-  let searchTerm = '';
+  let searchTerm = "";
 
   const template = `
-    <div class="data-table-component">
+    <div class="data-table-component" id="data-table-component">
       <div class="search-section">
         <label for="search-input">Search</label>
         <input type="text" id="search-input" class="search-input" placeholder="Search..." />
@@ -74,35 +74,38 @@ const Datatable = (container) => {
 
   const setupEventListeners = () => {
     // Search functionality
-    const searchInput = container.querySelector('#search-input');
-    searchInput.addEventListener('input', (e) => {
+    const searchInput = container.querySelector("#search-input");
+    searchInput.addEventListener("input", (e) => {
       searchTerm = e.target.value;
       filterData();
     });
 
     // Entries per page
-    const entriesSelect = container.querySelector('#entries-select');
-    entriesSelect.addEventListener('change', (e) => {
+    const entriesSelect = container.querySelector("#entries-select");
+    entriesSelect.addEventListener("change", (e) => {
       pageSize = parseInt(e.target.value);
       currentPage = 1;
       renderCurrentPage();
     });
 
     // Pagination clicks
-    container.addEventListener('click', (e) => {
-      if (e.target.classList.contains('pagination-btn') && e.target.dataset.page) {
+    container.addEventListener("click", (e) => {
+      if (
+        e.target.classList.contains("pagination-btn") &&
+        e.target.dataset.page
+      ) {
         currentPage = parseInt(e.target.dataset.page);
         renderCurrentPage();
       }
-      
-      if (e.target.id === 'prev-btn') {
+
+      if (e.target.id === "prev-btn") {
         if (currentPage > 1) {
           currentPage--;
           renderCurrentPage();
         }
       }
-      
-      if (e.target.id === 'next-btn') {
+
+      if (e.target.id === "next-btn") {
         const totalPages = Math.ceil((filteredData?.length || 0) / pageSize);
         if (currentPage < totalPages) {
           currentPage++;
@@ -114,7 +117,7 @@ const Datatable = (container) => {
 
   const loadData = async (frameworkData) => {
     showLoading();
-    
+
     try {
       currentData = frameworkData.data;
       filteredData = [...currentData];
@@ -122,8 +125,8 @@ const Datatable = (container) => {
       renderCurrentPage();
       hideLoading();
     } catch (error) {
-      console.error('Error loading table data:', error);
-      showError('Failed to load data. Please try again.');
+      console.error("Error loading table data:", error);
+      showError("Failed to load data. Please try again.");
       hideLoading();
     }
   };
@@ -131,10 +134,11 @@ const Datatable = (container) => {
   const filterData = () => {
     if (!currentData) return;
 
-    filteredData = currentData.filter(row => 
-      row.controlId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.description.toLowerCase().includes(searchTerm.toLowerCase())
+    filteredData = currentData.filter(
+      (row) =>
+        row.controlId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     currentPage = 1;
@@ -154,40 +158,46 @@ const Datatable = (container) => {
   };
 
   const renderTableRows = (data) => {
-    const tableBody = container.querySelector('#table-body');
-    tableBody.innerHTML = '';
+    const tableBody = container.querySelector("#table-body");
+    tableBody.innerHTML = "";
 
-    data.forEach(row => {
-      const tr = document.createElement('tr');
-      tr.className = row.isHighlighted ? 'highlighted' : '';
-      
+    data.forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.className = row.isHighlighted ? "highlighted" : "";
+
       tr.innerHTML = `
         <td>${row.controlId}</td>
         <td>${row.category}</td>
         <td>${row.description}</td>
       `;
-      
+
       tableBody.appendChild(tr);
     });
   };
 
   const renderPagination = () => {
     const totalPages = Math.ceil((filteredData?.length || 0) / pageSize);
-    const paginationContainer = container.querySelector('#pagination-container');
-    
+    const paginationContainer = container.querySelector(
+      "#pagination-container"
+    );
+
     if (totalPages <= 1) {
-      paginationContainer.innerHTML = '';
+      paginationContainer.innerHTML = "";
       return;
     }
 
     let paginationHTML = `
-      <button class="pagination-btn" id="prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+      <button class="pagination-btn" id="prev-btn" ${
+        currentPage === 1 ? "disabled" : ""
+      }>Previous</button>
     `;
 
     // Show page numbers
     for (let i = 1; i <= Math.min(totalPages, 5); i++) {
       paginationHTML += `
-        <button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>
+        <button class="pagination-btn ${
+          i === currentPage ? "active" : ""
+        }" data-page="${i}">${i}</button>
       `;
     }
 
@@ -199,45 +209,47 @@ const Datatable = (container) => {
     }
 
     paginationHTML += `
-      <button class="pagination-btn" id="next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+      <button class="pagination-btn" id="next-btn" ${
+        currentPage === totalPages ? "disabled" : ""
+      }>Next</button>
     `;
 
     paginationContainer.innerHTML = paginationHTML;
   };
 
   const updatePaginationInfo = () => {
-    const paginationText = container.querySelector('#pagination-text');
+    const paginationText = container.querySelector("#pagination-text");
     const total = filteredData?.length || 0;
-    
+
     if (total === 0) {
-      paginationText.textContent = 'Showing 0 to 0 of 0 entries';
+      paginationText.textContent = "Showing 0 to 0 of 0 entries";
       return;
     }
-    
+
     const start = (currentPage - 1) * pageSize + 1;
     const end = Math.min(start + pageSize - 1, total);
-    
+
     paginationText.textContent = `Showing ${start} to ${end} of ${total} entries`;
   };
 
   const showLoading = () => {
-    const loadingSpinner = container.querySelector('#loading-spinner');
-    const dataTable = container.querySelector('#data-table');
-    
-    loadingSpinner.classList.remove('hidden');
-    dataTable.classList.add('hidden');
+    const loadingSpinner = container.querySelector("#loading-spinner");
+    const dataTable = container.querySelector("#data-table");
+
+    loadingSpinner.classList.remove("hidden");
+    dataTable.classList.add("hidden");
   };
 
   const hideLoading = () => {
-    const loadingSpinner = container.querySelector('#loading-spinner');
-    const dataTable = container.querySelector('#data-table');
-    
-    loadingSpinner.classList.add('hidden');
-    dataTable.classList.remove('hidden');
+    const loadingSpinner = container.querySelector("#loading-spinner");
+    const dataTable = container.querySelector("#data-table");
+
+    loadingSpinner.classList.add("hidden");
+    dataTable.classList.remove("hidden");
   };
 
   const showError = (message) => {
-    const tableBody = container.querySelector('#table-body');
+    const tableBody = container.querySelector("#table-body");
     tableBody.innerHTML = `
       <tr>
         <td colspan="3" style="text-align: center; padding: 40px; color: var(--dangerdanger);">
@@ -248,11 +260,8 @@ const Datatable = (container) => {
   };
 
   const clear = () => {
-    const tableBody = container.querySelector('#table-body');
-    tableBody.innerHTML = '';
-    
-    const paginationText = container.querySelector('#pagination-text');
-    paginationText.textContent = 'Select a framework to view data';
+    const tableBody = container.querySelector("#data-table-component");
+    tableBody.innerHTML = "";
   };
 
   // Initialize component
@@ -265,7 +274,7 @@ const Datatable = (container) => {
   return {
     init,
     loadData,
-    clear
+    clear,
   };
 };
 
