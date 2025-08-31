@@ -1,0 +1,126 @@
+// Framework Cards
+.framework-card {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  
+  &:hover {
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  &.selected {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    &::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid #ffffff;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      z-index: 10;
+    }
+  }
+  
+  .card-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .framework-image-container {
+    flex-shrink: 0;
+  }
+  
+  .framework-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .framework-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .framework-type {
+    font-size: 12px;
+    font-weight: 400;
+    color: #adb5bd;
+    line-height: 20px;
+    margin: 0 0 4px 0;
+  }
+  
+  .framework-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #212529;
+    line-height: 20px;
+    margin: 0 0 8px 0;
+  }
+  
+  .framework-description {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6c757d;
+    line-height: 18px;
+    margin: 0;
+  }
+}
+
+// Status Badges
+.status-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  &.ready-to-map {
+    background-color: #e2d9f3;
+    color: #6f42c1;
+  }
+  
+  &.mapping-in-progress {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  &.ready-to-publish {
+    background-color: #cff4fc;
+    color: #055160;
+  }
+  
+  &.mapping-failed {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  &.published {
+    background-color: #d8f5e4;
+    color: #3dcc77;
+  }
+  
+  &.deactivated {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+}
