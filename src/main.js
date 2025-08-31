@@ -1,5 +1,5 @@
 import './scss/main.scss';
-import App from './App';
+import App from './app';
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', async () => {
