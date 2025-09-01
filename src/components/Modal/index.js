@@ -2,8 +2,8 @@ import Stepper from "../Stepper";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./modal.scss";
 import { Modal as BootstrapModal } from "bootstrap";
-import getStep1Content from "./partials/Step1";
-import getStep2Content, { initializeStep2 } from "./partials/Step2";
+import getStep1Content from "./partials/step1";
+import getStep2Content, { initializeStep2 } from "./partials/step2";
 import iconPlusImg from '../../../public/assets/images/icon-plus.svg';
 
 // Global error handler to catch Bootstrap focus errors
