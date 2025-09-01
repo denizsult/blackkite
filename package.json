@@ -6,7 +6,7 @@
   "scripts": {
     "copy-assets": "mkdir -p development && cp -r public/assets development/",
     "dev": "npm run clean && npm run copy-assets && parcel public/index.html --out-dir development -p 3000 --public-url /",
-    "build": "rimraf ./dist && parcel build public/*.html --out-dir dist --public-url ./",
+    "build": "rimraf ./dist && parcel build public/*.html --out-dir dist --public-url ./ && cp -r public/assets dist/",
     "clean": "rimraf ./development && rimraf ./.cache"
   },
   "repository": {

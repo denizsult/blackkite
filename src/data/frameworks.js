@@ -1,3 +1,20 @@
+// Import all images
+import rectangle219 from '../../public/assets/images/rectangle-219.png';
+import rectangle219_1 from '../../public/assets/images/rectangle-219-1.png';
+import rectangle219_2 from '../../public/assets/images/rectangle-219-2.png';
+import rectangle219_3 from '../../public/assets/images/rectangle-219-3.png';
+import rectangle219_4 from '../../public/assets/images/rectangle-219-4.png';
+import rectangle219_5 from '../../public/assets/images/rectangle-219-5.png';
+import rectangle219_6 from '../../public/assets/images/rectangle-219-6.png';
+import rectangle219_7 from '../../public/assets/images/rectangle-219-7.png';
+import rectangle219_8 from '../../public/assets/images/rectangle-219-8.svg';
+import iconInfo from '../../public/assets/images/icon-info.svg';
+import iconSetings from '../../public/assets/images/icon-setings.svg';
+import iconPlaylistCheck from '../../public/assets/images/icon-playlist-check.svg';
+import iconClose from '../../public/assets/images/icon-close.svg';
+import iconCheck from '../../public/assets/images/icon-check.svg';
+import iconArchiveLock from '../../public/assets/images/icon-archive-lock.svg';
+
 // Mock framework control data
 export const frameworkControlsData = {
   1: {
@@ -118,11 +135,11 @@ export const frameworksData = [
     type: "Custom Framework",
     title: "ECF 2023",
     description: "Example Custom Framework",
-    image: "/assets/images/rectangle-219.png",
+    image: rectangle219,
     status: {
       text: "Ready to Map",
       variant: "ready",
-      icon: "/assets/images/icon-info.svg",
+      icon: iconInfo,
     },
   },
   {
@@ -130,11 +147,11 @@ export const frameworksData = [
     type: "Custom Framework",
     title: "CSHRTN",
     description: "Custom Framework",
-    image: "/assets/images/rectangle-219-1.png",
+    image: rectangle219_1,
     status: {
       text: "Mapping in Progress",
       variant: "progress",
-      icon: "/assets/images/icon-setings.svg",
+      icon: iconSetings,
     },
   },
   {
@@ -142,11 +159,11 @@ export const frameworksData = [
     type: "Custom Framework",
     title: "DCF 2023",
     description: "Demo Custom Framework",
-    image: "/assets/images/rectangle-219-2.png",
+    image: rectangle219_2,
     status: {
       text: "Ready to Publish",
       variant: "publish",
-      icon: "/assets/images/icon-playlist-check.svg",
+      icon: iconPlaylistCheck,
     },
   },
   {
@@ -154,11 +171,11 @@ export const frameworksData = [
     type: "Custom Framework",
     title: "CF",
     description: "Cybersecurity Framework",
-    image: "/assets/images/rectangle-219-3.png",
+    image: rectangle219_3,
     status: {
       text: "Mapping Failed",
       variant: "failed",
-      icon: "/assets/images/icon-close.svg",
+      icon: iconClose,
     },
   },
   {
@@ -166,11 +183,11 @@ export const frameworksData = [
     type: "Custom Framework",
     title: "ISCF",
     description: "Internet Security Custom Framework",
-    image: "/assets/images/rectangle-219-4.png",
+    image: rectangle219_4,
     status: {
       text: "Published",
       variant: "published",
-      icon: "/assets/images/icon-check.svg",
+      icon: iconCheck,
     },
   },
   {
@@ -178,11 +195,11 @@ export const frameworksData = [
     type: "Custom Framework",
     title: "CSHRTN 2",
     description: "Custom Framework",
-    image: "/assets/images/rectangle-219-5.png",
+    image: rectangle219_5,
     status: {
       text: "Deactivated",
       variant: "deactivated",
-      icon: "/assets/images/icon-archive-lock.svg",
+      icon: iconArchiveLock,
     },
   },
   {
@@ -190,7 +207,7 @@ export const frameworksData = [
     type: "System Framework",
     title: "GDPR",
     description: "General Data Protection Regulation",
-    image: "/assets/images/rectangle-219-8.svg",
+    image: rectangle219_8,
     status: null,
   },
   {
@@ -198,7 +215,7 @@ export const frameworksData = [
     type: "System Framework",
     title: "NIST CSF",
     description: "NIST Cybersecurity Framework",
-    image: "/assets/images/rectangle-219-6.png",
+    image: rectangle219_6,
     status: null,
   },
   {
@@ -206,7 +223,7 @@ export const frameworksData = [
     type: "System Framework",
     title: "ISO27001",
     description: "Internet Security Management",
-    image: "/assets/images/rectangle-219-7.png",
+    image: rectangle219_7,
     status: null,
   },
 ];

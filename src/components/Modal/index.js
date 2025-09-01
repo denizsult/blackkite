@@ -4,6 +4,7 @@ import "./modal.scss";
 import { Modal as BootstrapModal } from "bootstrap";
 import getStep1Content from "./partials/Step1";
 import getStep2Content, { initializeStep2 } from "./partials/Step2";
+import iconPlusImg from '../../../public/assets/images/icon-plus.svg';
 
 // Global error handler to catch Bootstrap focus errors
 let errorHandlerAdded = false;
@@ -105,7 +106,7 @@ class AddFrameworkModal {
               ${
                 stepNumber > 1
                   ? `<button type="button" class="custom-btn btn-back">Previous Step</button>
-                  <button type="button" class="custom-btn btn-add-controls" ><img src="/assets/images/icon-plus.svg" alt="Plus" /> Add Control Items</button>`
+                  <button type="button" class="custom-btn btn-add-controls" ><img src="${iconPlusImg}" alt="Plus" /> Add Control Items</button>`
                   : ""
               }
               <button type="button" class="custom-btn btn-next">${
