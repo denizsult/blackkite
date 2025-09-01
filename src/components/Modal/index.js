@@ -2,8 +2,8 @@ import Stepper from "../Stepper";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./modal.scss";
 import { Modal as BootstrapModal } from "bootstrap";
-import getStep1Content from "./partials/step1";
-import getStep2Content from "./partials/step2";
+import getStep1Content from "./partials/Step1";
+import getStep2Content, { initializeStep2 } from "./partials/Step2";
 
 // Global error handler to catch Bootstrap focus errors
 let errorHandlerAdded = false;
@@ -100,15 +100,16 @@ class AddFrameworkModal {
 
             <!-- Action Buttons -->
             <div class="modal-actions">
+              <button type="button" class="custom-btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
               ${
                 stepNumber > 1
-                  ? '<button type="button" class="btn btn-back">< Back</button>'
+                  ? `<button type="button" class="custom-btn btn-back">Previous Step</button>
+                  <button type="button" class="custom-btn btn-add-controls" ><img src="/assets/images/icon-plus.svg" alt="Plus" /> Add Control Items</button>`
                   : ""
               }
-              <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-next">${
+              <button type="button" class="custom-btn btn-next">${
                 stepNumber === this.totalSteps
-                  ? "Finish"
+                  ? "Save"
                   : stepNumber === 1
                   ? "Next > Control Items"
                   : "Next"
@@ -138,7 +139,7 @@ class AddFrameworkModal {
     });
 
     // Back button
-    const backBtn = modalElement.querySelector(".btn-back");
+    const backBtn = modalElement.querySelector(".custom-btn.btn-back");
     if (backBtn) {
       backBtn.addEventListener("click", () => {
         onBack(this.currentStep);
@@ -146,7 +147,7 @@ class AddFrameworkModal {
     }
 
     // Next button
-    const nextBtn = modalElement.querySelector(".btn-next");
+    const nextBtn = modalElement.querySelector(".custom-btn.btn-next");
     if (nextBtn && onNext) {
       nextBtn.addEventListener("click", () => {
         const formData = this.getFormData(modalElement);
@@ -158,7 +159,7 @@ class AddFrameworkModal {
     }
 
     // File upload
-    const fileSelectBtn = modalElement.querySelector(".btn-file-select");
+    const fileSelectBtn = modalElement.querySelector(".custom-btn.btn-file-select");
     const fileInput = modalElement.querySelector(".file-input-hidden");
     const filePlaceholder = modalElement.querySelector(".file-placeholder");
 
@@ -352,7 +353,7 @@ class AddFrameworkModal {
             // Small delay to ensure modal is fully rendered
             setTimeout(() => {
               this.setFormData(currentFormData);
-              
+
               // Update stepper to reflect the current step
               if (this.stepperInstance) {
                 this.stepperInstance.updateStep(newStep);
@@ -435,6 +436,11 @@ class AddFrameworkModal {
 
     // Create stepper
     this.createStepper(modalElement, this.currentStep);
+
+    // Initialize Step 2 if it's the current step
+    if (this.currentStep === 2) {
+      initializeStep2(modalElement);
+    }
 
     // Initialize Lucide icons
     if (typeof lucide !== "undefined") {

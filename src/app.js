@@ -1,9 +1,9 @@
-import Modal from "./components/Modal";
 import DataTable from "./components/Datatable";
 import FrameworkCard from "./components/FrameworkCard";
 import { frameworksData, frameworkControlsData } from "./data/frameworks";
 import EmptyFrameworkState from "./components/EmptyFrameworkState";
 import { Header } from "./components/Header";
+import AddFrameworkModal from "./components/Modal";
 
 async function App() {
   const template = document.createElement("template");
@@ -21,7 +21,7 @@ async function App() {
 
           <div id="framework-controls" class="framework-controls">
       
-           ${EmptyFrameworkState()}
+           ${EmptyFrameworkState()} 
              </div>
         </div>
       </main>
@@ -78,7 +78,9 @@ function initializeApp(rootNode) {
 
     if (frameworkControlsData[framework.id]) {
       if (!currentDataTable) {
-        currentDataTable = new DataTable(frameworkControls);
+        currentDataTable = new DataTable({
+          container: frameworkControls,
+        });
       }
       currentDataTable.loadData(frameworkControlsData[framework.id]);
     }
@@ -93,7 +95,7 @@ function initializeApp(rootNode) {
       }
 
       // Create new modal instance
-      modal = new Modal();
+      modal = new AddFrameworkModal();
 
       // Render the modal
       modal.render(document.body, {

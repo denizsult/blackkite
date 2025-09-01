@@ -7,6 +7,10 @@
   border-radius: 16px;
   padding: 16px;
 
+  &.inside-modal {
+    padding: 0;
+  }
+
   .search-section {
     display: flex;
     align-items: center;
@@ -20,13 +24,13 @@
     }
 
     .search-input {
-      width: 200px;
-      height: 36px;
+      width: 144px;
+      height: 26px;
       padding: 8px 12px;
-      border: 1px solid $primarygray-300;
+      border: 2px solid $primarygray-300;
       border-radius: 8px;
       font-size: 14px;
-      font-family: "Poppins", sans-serif;
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
       transition: border-color 0.2s ease;
 
       &:focus {
@@ -86,11 +90,10 @@
       }
 
       thead {
-
         th {
           padding: 16px;
           text-align: left;
-           font-weight: 600;
+          font-weight: 600;
 
           &:first-child {
             width: 15%;
@@ -194,7 +197,7 @@
         border-radius: 6px;
         background: $universalwhite;
         font-size: 12px;
-        font-family: "Poppins", sans-serif;
+
         cursor: pointer;
 
         &:focus {
@@ -220,7 +223,7 @@
         background: $universalwhite;
         color: $primarygray-600;
         font-size: 12px;
-        font-family: "Poppins", sans-serif;
+
         cursor: pointer;
         transition: all 0.2s ease;
 
@@ -284,54 +287,5 @@
     font-size: 14px;
     color: $primarygray-500;
     max-width: 300px;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .data-table-component {
-    .search-section {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-
-      .search-input {
-        width: 100%;
-      }
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-
-      .data-table {
-        min-width: 600px;
-      }
-    }
-
-    .table-footer {
-      flex-direction: column;
-      gap: 16px;
-      align-items: stretch;
-
-      .pagination {
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .data-table-component {
-    padding: 12px;
-
-    .table-footer {
-      .pagination {
-        .pagination-btn {
-          padding: 6px 8px;
-          font-size: 11px;
-        }
-      }
-    }
   }
 }
