@@ -1,8 +1,8 @@
-@import './variables.scss';
-@import './components.scss';
-@import '../components/Modal/modal.scss';
-@import '../components/Datatable/style.scss';
-@import '../components/FrameworkCard/frameworkcard.scss';
+@import "./variables.scss";
+@import "./components.scss";
+@import "../components/Modal/modal.scss";
+@import "../components/Datatable/style.scss";
+@import "../components/FrameworkCard/frameworkcard.scss";
 
 * {
   margin: 0;
@@ -158,6 +158,8 @@ body {
 .scroll-area {
   height: 100%;
   overflow-y: auto;
+  padding-right: 8px;
+  margin-right: -8px;
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -182,7 +184,6 @@ body {
   flex-direction: column;
   gap: 8px;
 }
- 
 
 .framework-content {
   display: flex;
@@ -292,10 +293,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
- 
+
   overflow: hidden;
 
-  .detail-header {
+  .empty-framework-state-header {
     display: flex;
     align-items: flex-start;
     gap: 16px;
@@ -304,7 +305,7 @@ body {
   }
 
   &.empty {
-     padding: 24px;
+    padding: 24px;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -314,28 +315,5 @@ body {
 .framework-controls {
   flex: 1;
   overflow: auto;
-  
-  &:empty {
-    display: none;
-  }
-}
-
-.detail-icon {
-  width: 96px;
-  height: 96px;
-}
-
-.detail-text {
-  font-family: $font-family;
-  font-weight: 400;
-  color: $primarygray-900;
-  font-size: 24px;
-  line-height: 1.4;
-
-  .highlight {
-    font-weight: 600;
-  }
-}
-
  
- 
+}

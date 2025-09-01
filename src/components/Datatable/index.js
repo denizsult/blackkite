@@ -20,8 +20,23 @@ class DataTable {
     this.container.innerHTML = `
       <div class="data-table-component">
         <div class="search-section">
-          <label for="search-input">Search</label>
-          <input type="text" id="search-input" class="search-input" placeholder="Search..." />
+          <div class="search-container">
+            <label for="search-input">Search Controls</label>
+            <div class="search-input-wrapper">
+              <input 
+                type="text" 
+                id="search-input" 
+                class="search-input" 
+                placeholder="Search by ID, category or description..." 
+              />
+              <div class="search-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
         
         <div class="table-wrapper">
@@ -262,10 +277,20 @@ class DataTable {
 
   clear() {
     const tableBody = this.container.querySelector('#table-body');
-    tableBody.innerHTML = '';
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="3">
+          <div class="table-empty-state">
+            <img src="assets/images/icon-format-list.svg" alt="Empty table" class="empty-icon" />
+            <h3>No Framework Selected</h3>
+            <p>Please select a framework from the list to view its control data. You can then search, sort, and analyze the controls.</p>
+          </div>
+        </td>
+      </tr>
+    `;
     
     const paginationText = this.container.querySelector('#pagination-text');
-    paginationText.textContent = 'Select a framework to view data';
+    paginationText.textContent = '';
   }
 }
 

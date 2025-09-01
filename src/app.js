@@ -18,8 +18,11 @@ async function App() {
               <div class="frameworks-grid" id="frameworks-grid"></div>
             </div>
           </div>
-  
-           ${EmptyFrameworkState("empty")}
+
+          <div id="framework-controls" class="framework-controls">
+      
+           ${EmptyFrameworkState()}
+             </div>
         </div>
       </main>
     </div>
@@ -27,7 +30,6 @@ async function App() {
 
   const node = template.content.cloneNode(true);
 
-  // Initialize immediately since main.js already handles DOMContentLoaded
   initializeApp(node);
 
   return node;
@@ -64,8 +66,6 @@ function initializeApp(rootNode) {
       selectedCard.classList.add("selected");
     }
 
-    updateDetailPanel(framework, mainContainerDOM);
-
     // Initialize or update DataTable
     const frameworkControls = mainContainerDOM.querySelector(
       "#framework-controls"
@@ -79,14 +79,13 @@ function initializeApp(rootNode) {
     if (frameworkControlsData[framework.id]) {
       if (!currentDataTable) {
         currentDataTable = new DataTable(frameworkControls);
-        console.log("currentDataTable :>> ", currentDataTable);
       }
       currentDataTable.loadData(frameworkControlsData[framework.id]);
     }
   }
 
   rootNode
-    .querySelector("#open-create-framework-modal")
+    .querySelector(".open-create-framework-modal")
     .addEventListener("click", () => {
       // Remove existing modal if any
       if (modal) {
@@ -145,17 +144,6 @@ function initializeApp(rootNode) {
         },
       });
     });
-
-  // Update detail panel
-  function updateDetailPanel(framework, rootNode) {
-    const detailPanel = rootNode.querySelector(".empty-framework-state");
-
-    detailPanel.classList.remove("empty");
-
-    detailPanel.innerHTML = `
-      <div id="framework-controls" class="framework-controls"></div>
-    `;
-  }
 
   // Listen for new framework events
   window.addEventListener("addFramework", (e) => {
