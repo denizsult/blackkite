@@ -1,350 +1,347 @@
 @import '../../scss/variables.scss';
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-
-  &.active {
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-.modal {
-  background-color: $universalwhite;
+// Modal Container
+.modal-container {
+  width: 1140px;
+  max-width: 95vw;
+  background: universalwhite;
   border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  transform: translateY(20px);
-  transition: transform 0.3s ease;
-
-  .modal-overlay.active & {
-    transform: translateY(0);
-  }
-}
-
-.modal-header {
-  padding: 24px 24px 0 24px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid $primarygray-200;
-  padding-bottom: 16px;
-  margin-bottom: 24px;
-}
-
-.steps-container {
-  padding: 0 24px;
-  margin-bottom: 24px;
-}
-
-.steps {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.step {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
-  font-family: $font-family;
-  font-size: 14px;
-  color: $primarygray-500;
-  transition: color 0.2s ease;
-
-  &.active {
-    color: $brandbrand;
-  }
-
-  &.completed {
-    color: $primarygray-700;
-  }
 }
 
-.step-number {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: $primarygray-200;
-  color: $primarygray-600;
+// Modal Header
+.modal-header-custom {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 12px;
-  transition: all 0.2s ease;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
 
-  .step.active & {
-    background-color: $brandbrand;
-    color: $universalwhite;
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: $primarygray-900;
+    margin: 0;
   }
 
-  .step.completed & {
-    background-color: $primarygray-700;
-    color: $universalwhite;
+  .step-badge {
+    background-color: $primarygray-400;
+    color: universalwhite;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 28px;
+  }
+
+  .btn-close-custom {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $primarygray-600;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $primarygray-900;
+    }
+
+    i {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .modal-subtitle {
+    color: $primarygray-600;
+    font-size: 14px;
+    margin: 0;
+    width: 100%;
   }
 }
 
-.step-separator {
-  width: 32px;
-  height: 1px;
-  background-color: $primarygray-200;
-  transition: background-color 0.2s ease;
+// Progress Steps
+.progress-steps {
+  height: 77px;
+  margin-bottom: 16px;
+  position: relative;
 
-  &.completed {
-    background-color: $primarygray-700;
+  .step-container {
+    position: relative;
+    width: 100%;
+    height: 61px;
+  }
+
+  .step {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    &:first-child {
+      left: 0;
+    }
+
+    &:last-child {
+      right: 0;
+    }
+
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+      border: 1px solid $primarygray-300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: universalwhite;
+      position: relative;
+
+      .step-number {
+        font-size: 14px;
+        font-weight: 600;
+        color: $primarygray-600;
+        z-index: 2;
+      }
+    }
+
+    .step-label {
+      font-size: 14px;
+      color: $primarygray-900;
+      white-space: nowrap;
+    }
+
+    &.active {
+      .step-circle {
+        border-color: $brandbrand;
+
+        &::after {
+          content: '';
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          background: $brandbrand;
+          border-radius: 15px;
+          top: 2px;
+          left: 2px;
+        }
+
+        .step-number {
+          color: $universalwhite;
+          z-index: 3;
+        }
+      }
+    }
+  }
+
+  .progress-line {
+    position: absolute;
+    top: 17px;
+    left: 52px;
+    right: 52px;
+    height: 2px;
+    background: $primarygray-400;
+    border-radius: 1px;
   }
 }
 
-.modal-title {
-  font-family: $font-family;
-  font-weight: 600;
-  font-size: 20px;
-  color: $primarygray-900;
+// Alert
+.alert-info-custom {
+  background-color: $infoinfo-100;
+  border: 0.8px solid $infoinfo;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+
+  .alert-text {
+    color: $infoinfo;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+// Form Groups
+.form-group-custom {
+  background-color: $primarygray-100;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label-custom {
+  font-size: 14px;
+  font-weight: 500;
+  color: $primarygray-600;
   margin: 0;
 }
 
-.modal-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: $primarygray-100;
-  }
-
-  img {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-.modal-body {
-  padding: 0 24px 24px 24px;
-}
-
-.step-content {
-  display: none;
-
-  &.active {
-    display: block;
-  }
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-label {
-  display: block;
-  font-family: $font-family;
-  font-weight: 500;
-  font-size: 14px;
-  color: $primarygray-700;
-  margin-bottom: 8px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 16px;
+.form-control-custom {
   border: 1px solid $primarygray-300;
   border-radius: 8px;
-  font-family: $font-family;
-  font-size: 14px;
-  color: $primarygray-900;
-  background-color: $universalwhite;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 6px 12px;
+  font-size: 16px;
+  color: $primarygray-600;
+  background: universalwhite;
+  transition: border-color 0.15s ease-in-out;
 
   &:focus {
     outline: none;
     border-color: $brandbrand;
-    box-shadow: 0 0 0 3px rgba(61, 204, 119, 0.1);
+    box-shadow: 0 0 0 0.2rem rgba(61, 204, 119, 0.25);
   }
 
   &::placeholder {
-    color: $primarygray-500;
+    color: $primarygray-600;
   }
 }
 
-.form-textarea {
-  resize: vertical;
-  min-height: 80px;
+.textarea-custom {
+  height: 82px;
+  resize: none;
 }
 
-.form-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
-  padding-right: 40px;
-}
-
-.modal-footer {
-  padding: 0 24px 24px 24px;
+// File Upload
+.file-upload-container {
   display: flex;
-  gap: 12px;
-  justify-content: flex-end;
+  align-items: center;
+  background: universalwhite;
+  border: 1px solid $primarygray-300;
+  border-radius: 8px;
+  overflow: hidden;
 
-  .btn-back {
-    margin-right: auto;
+  .btn-file-select {
+    background: $primarygray-600;
+    color: universalwhite;
+    border: none;
+    padding: 6px 12px;
+    font-size: 16px;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: darken($primarygray-600, 10);
+    }
   }
+
+  .file-placeholder {
+    flex: 1;
+    padding: 6px 12px;
+    color: $primarygray-600;
+    font-size: 16px;
+  }
+}
+
+// Custom Checkbox
+.form-check-input {
+  width: 22px;
+  height: 22px;
+  border: 1px solid $primarygray-300;
+  border-radius: 4px;
+  background: universalwhite;
+
+  &:checked {
+    background-color: $brandbrand;
+    border-color: $brandbrand;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(61, 204, 119, 0.25);
+  }
+}
+
+// Action Buttons
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-top: 16px;
 }
 
 .btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  padding: 6px 12px;
   border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   border: none;
-  font-family: $font-family;
-  font-weight: 500;
-  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-.btn-secondary {
-  background-color: $primarygray-100;
-  color: $primarygray-700;
-  border: 1px solid $primarygray-300;
-
-  &:hover {
-    background-color: $primarygray-200;
-    border-color: $primarygray-400;
-  }
-}
-
-.btn-primary {
-  background-color: $brandbrand;
-  color: $universalwhite;
-  border: 1px solid $brandbrand;
-
-  &:hover {
-    background-color: darken($brandbrand, 10%);
-  }
-
-  &:disabled {
-    background-color: $primarygray-300;
-    color: $primarygray-500;
-    border-color: $primarygray-300;
-    cursor: not-allowed;
-  }
-}
-
-// File upload styles
-.file-upload {
-  border: 2px dashed $primarygray-300;
-  border-radius: 8px;
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    border-color: $brandbrand;
-    background-color: rgba(61, 204, 119, 0.05);
-  }
-
-  &.dragover {
-    border-color: $brandbrand;
-    background-color: rgba(61, 204, 119, 0.1);
-  }
-}
-
-.file-upload-icon {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 12px;
-  opacity: 0.6;
-}
-
-.file-upload-text {
-  font-family: $font-family;
-  font-size: 14px;
-  color: $primarygray-600;
-  margin-bottom: 8px;
-}
-
-.file-upload-hint {
-  font-family: $font-family;
-  font-size: 12px;
-  color: $primarygray-500;
-}
-
-.file-input {
-  display: none;
-}
-
-.uploaded-file {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background-color: $primarygray-50;
-  border-radius: 8px;
-  margin-top: 12px;
+  justify-content: center;
+  gap: 4px;
 }
 
-.uploaded-file-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.uploaded-file-info {
-  flex: 1;
-}
-
-.uploaded-file-name {
-  font-family: $font-family;
-  font-weight: 500;
-  font-size: 14px;
+.btn-cancel {
+  background: $primarygray-100;
   color: $primarygray-900;
-}
-
-.uploaded-file-size {
-  font-family: $font-family;
-  font-size: 12px;
-  color: $primarygray-500;
-}
-
-.remove-file {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: $primarygray-200;
+    background: darken($primarygray-100, 5);
+  }
+}
+
+.btn-next {
+  background: $brandbrand;
+  color: universalwhite;
+
+  &:hover {
+      background: darken($brandbrand, 10);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .modal-container {
+    width: 100%;
+    margin: 16px;
+    padding: 16px;
   }
 
-  img {
-    width: 16px;
-    height: 16px;
+  .progress-steps {
+    .step {
+      &:last-child {
+        right: 0;
+      }
+    }
+
+    .progress-line {
+      left: 36px;
+      right: 36px;
+    }
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .row.g-2 {
+    .col-md-6 {
+      margin-bottom: 8px;
+    }
   }
 }

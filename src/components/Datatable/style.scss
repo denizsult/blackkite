@@ -86,13 +86,11 @@
       }
 
       thead {
-        background: $primarygray-100;
 
         th {
           padding: 16px;
           text-align: left;
-          border-bottom: 1px solid $primarygray-200;
-          font-weight: 600;
+           font-weight: 600;
 
           &:first-child {
             width: 15%;
@@ -134,7 +132,7 @@
         tr {
           transition: background-color 0.2s ease;
 
-          &:nth-child(even) {
+          &:nth-child(odd) {
             background: $primarygray-100;
           }
 

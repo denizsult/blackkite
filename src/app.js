@@ -36,8 +36,8 @@ async function App() {
 function initializeApp(rootNode) {
   const mainContainerDOM = rootNode.querySelector("#main-container");
   const frameworksListDOM = rootNode.querySelector("#frameworks-grid");
-  // Remove 'new' - just call the function
-  const modal = Modal();
+  // Initialize modal instance
+  let modal = null;
   let currentDataTable = null;
 
   // Render frameworks
@@ -98,7 +98,61 @@ function initializeApp(rootNode) {
   rootNode
     .querySelector("#open-create-framework-modal")
     .addEventListener("click", () => {
-      modal.open();
+ 
+      // Remove existing modal if any
+      if (modal) {
+        modal.destroy();
+      }
+      
+      // Create new modal instance
+      modal = new Modal();
+      
+      // Render the modal
+      modal.render(document.body, {
+        onClose: () => {
+          if (modal) {
+            modal.destroy();
+            modal = null;
+          }
+        },
+        onNext: (formData, currentStep) => {
+          if (currentStep < modal.totalSteps) {
+            modal.updateStep(currentStep + 1);
+          } else {
+            // Handle form submission (final step)
+            const newFramework = {
+              id: Date.now(), // Simple ID generation
+              name: formData.name,
+              shortName: formData.shortName,
+              description: formData.description,
+              controls: formData.controls || [],
+              // Add other properties as needed
+            };
+            
+            // Dispatch the addFramework event
+            window.dispatchEvent(new CustomEvent('addFramework', {
+              detail: newFramework
+            }));
+            
+            // Close modal
+            if (modal) {
+              modal.destroy();
+              modal = null;
+            }
+          }
+        },
+        onBack: (currentStep) => {
+          if (currentStep > 1) {
+            modal.updateStep(currentStep - 1);
+          }
+        },
+        onCancel: () => {
+          if (modal) {
+            modal.destroy();
+            modal = null;
+          }
+        }
+      });
     });
 
   // Listen for new framework events
