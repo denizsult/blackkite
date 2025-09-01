@@ -76,14 +76,12 @@ function initializeApp(rootNode) {
       currentDataTable = null;
     }
 
-    if (frameworkControlsData[framework.id]) {
-      if (!currentDataTable) {
-        currentDataTable = new DataTable({
-          container: frameworkControls,
-        });
-      }
-      currentDataTable.loadData(frameworkControlsData[framework.id]);
+    if (!currentDataTable) {
+      currentDataTable = new DataTable({
+        container: frameworkControls,
+      });
     }
+    currentDataTable.loadData(frameworkControlsData[framework.id] || []);
   }
 
   rootNode

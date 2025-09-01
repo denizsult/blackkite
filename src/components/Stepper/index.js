@@ -1,6 +1,7 @@
 import "./style.scss";
 
 const Stepper = (stepperData = {}) => {
+  
   const {
     currentStep = 1,
     totalSteps = 2,

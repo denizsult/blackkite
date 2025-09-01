@@ -154,6 +154,12 @@ class DataTable {
   }
 
   async loadData(frameworkData) {
+
+    if (frameworkData?.length === 0) {
+      this.clear();
+      return;
+    }
+
     this.showLoading();
 
     try {
