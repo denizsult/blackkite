@@ -300,6 +300,7 @@
   .btn-next {
     background: $brandbrand;
     color: $universalwhite;
+    font-family: $font-family;
 
     &:hover {
       background: darken($brandbrand, 10);

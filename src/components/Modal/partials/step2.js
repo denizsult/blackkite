@@ -21,6 +21,7 @@ export const initializeStep2 = (container) => {
         showSearch: false,
         showPagination: false,
         insideModal: true,
+        actionsColumn: true,
       });
       dataTable.loadData(controlItemsData);
     }

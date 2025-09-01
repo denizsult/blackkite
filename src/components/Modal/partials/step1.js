@@ -45,7 +45,7 @@ const getStep1Content = (infoText) => {
       <div class="file-upload-container">
         <button type="button" class="btn-file-select">Select File</button>
         <span class="file-placeholder">No file selected</span>
-        <input type="file" class="file-input-hidden" accept=".zip,.rar,.tar.gz" style="display: none;">
+        <input type="file" class="file-input-hidden" name="template" accept=".zip,.rar,.tar.gz" style="display: none;">
       </div>
     </div>
   `;

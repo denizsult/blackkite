@@ -1,7 +1,6 @@
 import "./style.scss";
 
 const Stepper = (stepperData = {}) => {
-  
   const {
     currentStep = 1,
     totalSteps = 2,
@@ -46,10 +45,10 @@ const Stepper = (stepperData = {}) => {
   `;
 
   const updateStep = (element, newStep) => {
-    const stepElements = element.querySelectorAll(".step");
-    const progressLine = element.querySelector(".progress-line");
+    const stepElements = element?.querySelectorAll?.(".step");
+    const progressLine = element?.querySelector?.(".progress-line");
 
-    stepElements.forEach((stepEl, index) => {
+    stepElements?.forEach?.((stepEl, index) => {
       const stepNumber = index + 1;
       const isActive = stepNumber <= newStep;
       const isCompleted = stepNumber < newStep;
@@ -59,7 +58,7 @@ const Stepper = (stepperData = {}) => {
     });
 
     if (progressLine) {
-      progressLine.classList.toggle("progress-active", newStep > 1);
+      progressLine?.classList?.toggle?.("progress-active", newStep > 1);
     }
   };
 

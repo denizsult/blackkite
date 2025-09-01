@@ -20,7 +20,7 @@ export const Header = () => {
             <button class="custom-btn btn-primary open-create-framework-modal">
               <img class="custom-btn-icon" src="/assets/images/frame-1013.svg" alt="Add icon" />
               <span>New Custom Framework</span>
-              <div class="custom-btn-badge">1/3</div>
+              <div class="custom-btn-badge">1/2</div>
             </button>
           </div>
         </div>

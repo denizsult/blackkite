@@ -1,7 +1,14 @@
 // DataTable component for displaying framework control data
 import { EmptyState } from "./EmptyState";
+import { TableActions } from "./TableActions";
 class DataTable {
-  constructor({ container, showSearch = true, showPagination = true , insideModal = false}) {
+  constructor({
+    container,
+    showSearch = true,
+    showPagination = true,
+    insideModal = false,
+    actionsColumn = false,
+  }) {
     this.container = container;
     this.currentData = null;
     this.filteredData = null;
@@ -11,6 +18,7 @@ class DataTable {
     this.showSearch = showSearch;
     this.showPagination = showPagination;
     this.insideModal = insideModal;
+    this.actionsColumn = actionsColumn;
 
     this.init();
   }
@@ -22,7 +30,9 @@ class DataTable {
 
   render() {
     this.container.innerHTML = `
-      <div class="data-table-component ${this.insideModal ? "inside-modal" : ""}">
+      <div class="data-table-component ${
+        this.insideModal ? "inside-modal" : ""
+      }">
         ${
           this.showSearch
             ? `
@@ -69,6 +79,13 @@ class DataTable {
                     <span>Control Description</span>
                   </div>
                 </th>
+                  ${this.actionsColumn ? `
+                <th>
+                 <div class="header-cell">
+                    <span>Actions</span>
+                  </div>
+                </th>
+                 ` : ""}
               </tr>
             </thead>
             <tbody id="table-body">
@@ -77,7 +94,9 @@ class DataTable {
           </table>
         </div>
 
-        ${this.showPagination ? `
+        ${
+          this.showPagination
+            ? `
         <div class="table-footer">
           <div class="entries-info">
             <span>Show</span>
@@ -97,7 +116,9 @@ class DataTable {
               <!-- Pagination buttons will be generated dynamically -->
             </div>
           </div>
-        ` : ""}
+        `
+            : ""
+        }
       </div>
     `;
   }
@@ -114,47 +135,56 @@ class DataTable {
 
     // Entries per page
     if (this.showPagination) {
-    const entriesSelect = this.container.querySelector("#entries-select");
-    entriesSelect.addEventListener("change", (e) => {
-      this.pageSize = parseInt(e.target.value);
-      this.currentPage = 1;
+      const entriesSelect = this.container.querySelector("#entries-select");
+      entriesSelect.addEventListener("change", (e) => {
+        this.pageSize = parseInt(e.target.value);
+        this.currentPage = 1;
         this.renderCurrentPage();
       });
     }
 
+    if (this.actionsColumn) {
+      this.container.addEventListener("click", (e) => {
+        console.log('e :>> ', e);
+        if (e.target.classList.contains("table-action-button") || 
+            e.target.closest('.table-action-button')) {
+          alert("Action button clicked");
+        }
+      });
+    }
+
     if (this.showPagination) {
-    // Pagination clicks
-    this.container.addEventListener("click", (e) => {
-      if (
-        e.target.classList.contains("pagination-btn") &&
-        e.target.dataset.page
-      ) {
-        this.currentPage = parseInt(e.target.dataset.page);
-        this.renderCurrentPage();
-      }
-
-      if (e.target.id === "prev-btn") {
-        if (this.currentPage > 1) {
-          this.currentPage--;
+      // Pagination clicks
+      this.container.addEventListener("click", (e) => {
+        if (
+          e.target.classList.contains("pagination-btn") &&
+          e.target.dataset.page
+        ) {
+          this.currentPage = parseInt(e.target.dataset.page);
           this.renderCurrentPage();
         }
-      }
 
-      if (e.target.id === "next-btn") {
-        const totalPages = Math.ceil(
-          (this.filteredData?.length || 0) / this.pageSize
-        );
-        if (this.currentPage < totalPages) {
-          this.currentPage++;
-          this.renderCurrentPage();
+        if (e.target.id === "prev-btn") {
+          if (this.currentPage > 1) {
+            this.currentPage--;
+            this.renderCurrentPage();
+          }
         }
+
+        if (e.target.id === "next-btn") {
+          const totalPages = Math.ceil(
+            (this.filteredData?.length || 0) / this.pageSize
+          );
+          if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.renderCurrentPage();
+          }
         }
       });
     }
   }
 
   async loadData(frameworkData) {
-
     if (frameworkData?.length === 0) {
       this.clear();
       return;
@@ -213,6 +243,9 @@ class DataTable {
         <td>${row.controlId}</td>
         <td>${row.category}</td>
         <td>${row.description}</td>
+        ${this.actionsColumn ? `
+        <td>${TableActions(row)}</td>
+        ` : ""}
       `;
 
       tableBody.appendChild(tr);
@@ -314,8 +347,8 @@ class DataTable {
     tableBody.innerHTML = ` ${EmptyState()}`;
 
     if (this.showPagination) {
-    const paginationText = this.container.querySelector("#pagination-text");
-    paginationText.textContent = "";
+      const paginationText = this.container.querySelector("#pagination-text");
+      paginationText.textContent = "";
     }
   }
 }

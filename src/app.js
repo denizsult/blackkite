@@ -103,45 +103,6 @@ function initializeApp(rootNode) {
             modal = null;
           }
         },
-        onNext: (formData, currentStep) => {
-          if (currentStep < modal.totalSteps) {
-            modal.updateStep(currentStep + 1);
-          } else {
-            // Handle form submission (final step)
-            const newFramework = {
-              id: Date.now(), // Simple ID generation
-              name: formData.name,
-              shortName: formData.shortName,
-              description: formData.description,
-              controls: formData.controls || [],
-              // Add other properties as needed
-            };
-
-            // Dispatch the addFramework event
-            window.dispatchEvent(
-              new CustomEvent("addFramework", {
-                detail: newFramework,
-              })
-            );
-
-            // Close modal
-            if (modal) {
-              modal.destroy();
-              modal = null;
-            }
-          }
-        },
-        onBack: (currentStep) => {
-          if (currentStep > 1) {
-            modal.updateStep(currentStep - 1);
-          }
-        },
-        onCancel: () => {
-          if (modal) {
-            modal.destroy();
-            modal = null;
-          }
-        },
       });
     });
 

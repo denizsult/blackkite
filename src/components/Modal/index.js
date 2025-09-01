@@ -47,6 +47,7 @@ class AddFrameworkModal {
     this.container = null;
     this.callbacks = {};
     this.bootstrapModal = null;
+    this.formData = {};
   }
 
   getStepContent(stepNumber) {
@@ -123,43 +124,49 @@ class AddFrameworkModal {
 
   setupEventListeners() {
     const modalElement = document.getElementById("addFrameworkModal");
-    const { onCancel, onNext, onClose, onFileSelect, onFormChange, onBack } =
-      this.callbacks;
+    const { onClose, onFileSelect, onFormChange } = this.callbacks;
 
     // Store callbacks for re-binding after updates
     modalElement._callbacks = this.callbacks;
 
     // Bootstrap modal events
-    modalElement.addEventListener("hidden.bs.modal", () => {
+    const closeHandler = () => {
       if (onClose) {
         onClose();
       }
       // Clean up the modal element after it's hidden
       this.destroy();
-    });
+    };
+
+    // Store the close handler for future reference
+    modalElement._closeHandler = closeHandler;
+    modalElement.addEventListener("hidden.bs.modal", closeHandler);
 
     // Back button
     const backBtn = modalElement.querySelector(".custom-btn.btn-back");
     if (backBtn) {
       backBtn.addEventListener("click", () => {
-        onBack(this.currentStep);
+        console.log('this.formData :>> ', this.formData);
+        this.updateStep(this.currentStep - 1);
       });
     }
 
     // Next button
     const nextBtn = modalElement.querySelector(".custom-btn.btn-next");
-    if (nextBtn && onNext) {
+
+    if (nextBtn) {
       nextBtn.addEventListener("click", () => {
-        const formData = this.getFormData(modalElement);
         const isValid = this.validateForm(modalElement);
         if (isValid) {
-          onNext(formData, this.currentStep);
+          this.updateStep(this.currentStep + 1);
         }
       });
     }
 
     // File upload
-    const fileSelectBtn = modalElement.querySelector(".custom-btn.btn-file-select");
+    const fileSelectBtn = modalElement.querySelector(
+      ".custom-btn.btn-file-select"
+    );
     const fileInput = modalElement.querySelector(".file-input-hidden");
     const filePlaceholder = modalElement.querySelector(".file-placeholder");
 
@@ -231,26 +238,6 @@ class AddFrameworkModal {
         }
       });
     }
-
-    // Keyboard shortcuts
-    const handleKeydown = (e) => {
-      // ESC key is handled by Bootstrap
-
-      // Enter key to proceed (when not in textarea)
-      if (e.key === "Enter" && !e.target.matches("textarea")) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (nextBtn && onNext) {
-          const formData = this.getFormData(modalElement);
-          const isValid = this.validateForm(modalElement);
-          if (isValid) {
-            onNext(formData);
-          }
-        }
-      }
-    };
-
-    modalElement.addEventListener("keydown", handleKeydown);
   }
 
   bindControlItemEvents(element, onFormChange) {
@@ -263,10 +250,10 @@ class AddFrameworkModal {
         const selectAllCheckbox = element.querySelector("#select-all-controls");
         if (selectAllCheckbox) {
           const allChecked = Array.from(controlCheckboxes).every(
-            (cb) => cb.checked
+            (checkbox) => checkbox.checked
           );
           const someChecked = Array.from(controlCheckboxes).some(
-            (cb) => cb.checked
+            (checkbox) => checkbox.checked
           );
           selectAllCheckbox.checked = allChecked;
           selectAllCheckbox.indeterminate = someChecked && !allChecked;
@@ -327,6 +314,8 @@ class AddFrameworkModal {
       }
     });
 
+  
+
     return isValid;
   }
 
@@ -334,13 +323,22 @@ class AddFrameworkModal {
     const previousStep = this.currentStep;
     this.currentStep = newStep;
 
-    // Store current form data before destroying
+    // Store current form data before destroying and merge with persistent data
     const currentFormData = this.getCurrentFormData();
+    this.formData = { ...this.formData, ...currentFormData };
+
 
     if (this.bootstrapModal) {
       const modalElement = document.getElementById("addFrameworkModal");
+
       if (modalElement) {
-        // Set up one-time listener for when modal is fully hidden
+        // Remove the existing hidden.bs.modal event listener to prevent auto-destruction
+        const oldListeners = modalElement._listeners || [];
+        oldListeners.forEach((listener) => {
+          modalElement.removeEventListener("hidden.bs.modal", listener);
+        });
+
+        // Set up one-time listener for step update
         const handleModalHidden = () => {
           // Clean up the old modal
           modalElement.remove();
@@ -348,19 +346,26 @@ class AddFrameworkModal {
           // Create new modal with updated step
           this.render(this.container, this.callbacks);
 
-          // Always restore form data when navigating between steps
-          if (Object.keys(currentFormData).length > 0) {
-            // Small delay to ensure modal is fully rendered
+          // Always restore persistent form data when navigating between steps
+          if (Object.keys(this.formData).length > 0) {
+            // Increased delay to ensure modal is fully rendered
             setTimeout(() => {
-              this.setFormData(currentFormData);
+              console.log('About to restore form data for step:', newStep);
+              this.setFormData(this.formData);
 
               // Update stepper to reflect the current step
               if (this.stepperInstance) {
-                this.stepperInstance.updateStep(newStep);
+                this.stepperInstance?.updateStep(newStep);
               }
-            }, 50);
+            }, 200);
+          } else {
+            console.log('No form data to restore');
           }
         };
+
+        // Store the listener for future cleanup
+        modalElement._listeners = modalElement._listeners || [];
+        modalElement._listeners.push(handleModalHidden);
 
         // Add event listener
         modalElement.addEventListener("hidden.bs.modal", handleModalHidden, {
@@ -373,6 +378,14 @@ class AddFrameworkModal {
     } else {
       // Fallback if no bootstrap modal exists
       this.render(this.container, this.callbacks);
+      
+      // Restore form data in fallback case too
+      if (Object.keys(this.formData).length > 0) {
+        setTimeout(() => {
+          console.log('Fallback: About to restore form data for step:', newStep);
+          this.setFormData(this.formData);
+        }, 200);
+      }
     }
   }
 
@@ -392,22 +405,34 @@ class AddFrameworkModal {
         ],
       });
 
-      this.stepperInstance.render(stepperContainer);
+      this.stepperInstance?.render(stepperContainer);
     }
   }
 
   setFormData(data) {
     const element = document.getElementById("addFrameworkModal");
-    if (!element) return;
+    if (!element) {
+      console.log('Modal element not found when trying to set form data');
+      return;
+    }
+
+    console.log('Setting form data:', data);
+    console.log('Available inputs:', element.querySelectorAll('input, textarea'));
 
     Object.keys(data).forEach((key) => {
       const input = element.querySelector(`[name="${key}"]`);
+      console.log(`Looking for input with name="${key}":`, input);
+      
       if (input) {
         if (input.type === "checkbox") {
           input.checked = data[key];
+          console.log(`Set checkbox ${key} to:`, data[key]);
         } else if (input.type !== "file") {
           input.value = data[key];
+          console.log(`Set input ${key} to:`, data[key]);
         }
+      } else {
+        console.log(`Input with name="${key}" not found`);
       }
     });
   }

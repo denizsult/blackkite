@@ -11,6 +11,7 @@ export const frameworkControlsData = {
       {
         controlId: "ECF-002",
         category: "Data Protection",
+        isCompleted: true,
         description: "Encrypt sensitive data at rest",
       },
       {
