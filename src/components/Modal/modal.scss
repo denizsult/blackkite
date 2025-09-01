@@ -209,6 +209,10 @@
   &::placeholder {
     color: $primarygray-600;
   }
+
+  &.is-invalid {
+    border-color: #dc3545;
+  }
 }
 
 .textarea-custom {
@@ -266,6 +270,93 @@
   }
 }
 
+// Control Items Styling (for Step 2)
+.control-items-section {
+  .control-items-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: $primarygray-900;
+    margin: 0 0 8px 0;
+  }
+
+  .control-items-subtitle {
+    font-size: 14px;
+    color: $primarygray-600;
+    margin: 0;
+  }
+}
+
+.control-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.control-item {
+  background: $primarygray-100;
+  border-radius: 12px;
+  padding: 16px;
+  transition: background-color 0.2s ease;
+
+  .control-item-header {
+    margin-bottom: 8px;
+
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+
+      .form-check-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        margin: 0;
+
+        .control-icon {
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $primarygray-600;
+
+          i {
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        .control-name {
+          font-size: 14px;
+          font-weight: 500;
+          color: $primarygray-900;
+        }
+      }
+    }
+  }
+
+  .control-description {
+    font-size: 12px;
+    color: $primarygray-600;
+    margin-left: 34px;
+  }
+}
+
+.select-all-section {
+  border-top: 1px solid $primarygray-300;
+  padding-top: 16px;
+
+  .select-all-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: $primarygray-900;
+    cursor: pointer;
+  }
+}
+
 // Action Buttons
 .modal-actions {
   display: flex;
@@ -287,6 +378,15 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+}
+
+.btn-back {
+  background: $primarygray-100;
+  color: $primarygray-900;
+
+  &:hover {
+    background: darken($primarygray-100, 5);
+  }
 }
 
 .btn-cancel {
@@ -335,6 +435,10 @@
     .btn {
       width: 100%;
     }
+  }
+
+  .control-items-grid {
+    grid-template-columns: 1fr;
   }
 }
 

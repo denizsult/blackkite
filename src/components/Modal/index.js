@@ -1,6 +1,26 @@
 import Stepper from '../Stepper';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal as BootstrapModal } from 'bootstrap';
 
-// Modal component for adding new frameworks
+// Global error handler to catch Bootstrap focus errors
+let errorHandlerAdded = false;
+if (!errorHandlerAdded) {
+  window.addEventListener('error', (e) => {
+    // Catch Bootstrap focus errors and prevent them from breaking the app
+    if (e.message && (
+      e.message.includes("Cannot read properties of null (reading 'focus')") ||
+      e.message.includes("Cannot read property 'focus' of null") ||
+      e.filename && e.filename.includes('bootstrap')
+    )) {
+      console.warn('Bootstrap focus error caught and prevented:', e.message);
+      e.preventDefault();
+      return false;
+    }
+  });
+  errorHandlerAdded = true;
+}
+
+// Modal component for adding new frameworks using Bootstrap
 class AddFrameworkModal {
   constructor(modalData = {}) {
     const { 
@@ -22,6 +42,7 @@ class AddFrameworkModal {
     this.stepperInstance = null;
     this.container = null;
     this.callbacks = {};
+    this.bootstrapModal = null;
   }
 
   getStepContent(stepNumber) {
@@ -227,62 +248,64 @@ class AddFrameworkModal {
 
   getTemplate(stepNumber) {
     return `
-      <div class="modal-container">
-        <!-- Modal Header -->
-        <header class="modal-header-custom">
-          <div class="d-flex align-items-center">
-            <div class="d-flex align-items-center gap-2 flex-grow-1">
-              <h1 class="modal-title">${this.title}</h1>
-              <span class="step-badge">${stepNumber}/${this.totalSteps}</span>
+      <!-- Bootstrap Modal Structure -->
+      <div class="modal fade" id="addFrameworkModal" tabindex="-1" aria-labelledby="addFrameworkModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+          <div class="modal-content modal-container">
+            <!-- Modal Header -->
+            <header class="modal-header-custom">
+              <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center gap-2 flex-grow-1">
+                  <h1 class="modal-title">${this.title}</h1>
+                  <span class="step-badge">${stepNumber}/${this.totalSteps}</span>
+                </div>
+                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
+                  <i data-lucide="x"></i>
+                </button>
+              </div>
+              <div class="modal-subtitle">
+                ${stepNumber === 1 ? this.subtitle : 'Select the control items for your framework'}
+              </div>
+            </header>
+
+            <!-- Stepper will be inserted here -->
+            <div class="stepper-container"></div>
+
+            <!-- Dynamic Step Content -->
+            <div class="step-content">
+              ${this.getStepContent(stepNumber)}
             </div>
-            <button type="button" class="btn-close-custom" aria-label="Close">
-              <i data-lucide="x"></i>
-            </button>
+
+            <!-- Action Buttons -->
+            <div class="modal-actions">
+              ${stepNumber > 1 ? '<button type="button" class="btn btn-back">< Back</button>' : ''}
+              <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-next">${stepNumber === this.totalSteps ? 'Finish' : (stepNumber === 1 ? 'Next > Control Items' : 'Next')}</button>
+            </div>
           </div>
-          <div class="modal-subtitle">
-            ${stepNumber === 1 ? this.subtitle : 'Select the control items for your framework'}
-          </div>
-        </header>
-
-        <!-- Stepper will be inserted here -->
-        <div class="stepper-container"></div>
-
-        <!-- Dynamic Step Content -->
-        <div class="step-content">
-          ${this.getStepContent(stepNumber)}
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="modal-actions">
-          ${stepNumber > 1 ? '<button type="button" class="btn btn-back">< Back</button>' : ''}
-          <button type="button" class="btn btn-cancel">Cancel</button>
-          <button type="button" class="btn btn-next">${stepNumber === this.totalSteps ? 'Finish' : (stepNumber === 1 ? 'Next > Control Items' : 'Next')}</button>
         </div>
       </div>
     `;
   }
 
   setupEventListeners() {
-    const element = this.container.querySelector('.modal-container');
+    const modalElement = document.getElementById('addFrameworkModal');
     const { onCancel, onNext, onClose, onFileSelect, onFormChange, onBack } = this.callbacks;
 
     // Store callbacks for re-binding after updates
-    element._callbacks = this.callbacks;
+    modalElement._callbacks = this.callbacks;
 
-    // Close button
-    const closeBtn = element.querySelector('.btn-close-custom');
-    if (closeBtn && onClose) {
-      closeBtn.addEventListener('click', onClose);
-    }
-
-    // Cancel button
-    const cancelBtn = element.querySelector('.btn-cancel');
-    if (cancelBtn && onCancel) {
-      cancelBtn.addEventListener('click', onCancel);
-    }
+    // Bootstrap modal events
+    modalElement.addEventListener('hidden.bs.modal', () => {
+      if (onClose) {
+        onClose();
+      }
+      // Clean up the modal element after it's hidden
+      this.destroy();
+    });
 
     // Back button
-    const backBtn = element.querySelector('.btn-back');
+    const backBtn = modalElement.querySelector('.btn-back');
     if (backBtn && onBack) {
       backBtn.addEventListener('click', () => {
         onBack(this.currentStep);
@@ -290,11 +313,11 @@ class AddFrameworkModal {
     }
 
     // Next button
-    const nextBtn = element.querySelector('.btn-next');
+    const nextBtn = modalElement.querySelector('.btn-next');
     if (nextBtn && onNext) {
       nextBtn.addEventListener('click', () => {
-        const formData = this.getFormData(element);
-        const isValid = this.validateForm(element);
+        const formData = this.getFormData(modalElement);
+        const isValid = this.validateForm(modalElement);
         if (isValid) {
           onNext(formData, this.currentStep);
         }
@@ -302,9 +325,9 @@ class AddFrameworkModal {
     }
 
     // File upload
-    const fileSelectBtn = element.querySelector('.btn-file-select');
-    const fileInput = element.querySelector('.file-input-hidden');
-    const filePlaceholder = element.querySelector('.file-placeholder');
+    const fileSelectBtn = modalElement.querySelector('.btn-file-select');
+    const fileInput = modalElement.querySelector('.file-input-hidden');
+    const filePlaceholder = modalElement.querySelector('.file-placeholder');
 
     if (fileSelectBtn && fileInput) {
       fileSelectBtn.addEventListener('click', () => {
@@ -322,25 +345,25 @@ class AddFrameworkModal {
     }
 
     // Select All functionality for Step 2
-    const selectAllCheckbox = element.querySelector('#select-all-controls');
+    const selectAllCheckbox = modalElement.querySelector('#select-all-controls');
     if (selectAllCheckbox) {
       selectAllCheckbox.addEventListener('change', (e) => {
-        const controlCheckboxes = element.querySelectorAll('input[name="controls"]');
+        const controlCheckboxes = modalElement.querySelectorAll('input[name="controls"]');
         controlCheckboxes.forEach(checkbox => {
           checkbox.checked = e.target.checked;
         });
         
         if (onFormChange) {
-          onFormChange(this.getFormData(element));
+          onFormChange(this.getFormData(modalElement));
         }
       });
     }
 
     // Control item checkboxes
-    this.bindControlItemEvents(element, onFormChange);
+    this.bindControlItemEvents(modalElement, onFormChange);
 
     // Form field interactions
-    const formControls = element.querySelectorAll('.form-control-custom');
+    const formControls = modalElement.querySelectorAll('.form-control-custom');
     formControls.forEach(control => {
       control.addEventListener('focus', () => {
         control.closest('.form-group-custom').classList.add('field-focused');
@@ -356,35 +379,32 @@ class AddFrameworkModal {
         }
         
         if (onFormChange) {
-          onFormChange(this.getFormData(element));
+          onFormChange(this.getFormData(modalElement));
         }
       });
     });
 
     // Checkbox interaction
-    const logoCheck = element.querySelector('#logoCheck');
+    const logoCheck = modalElement.querySelector('#logoCheck');
     if (logoCheck) {
       logoCheck.addEventListener('change', () => {
         if (onFormChange) {
-          onFormChange(this.getFormData(element));
+          onFormChange(this.getFormData(modalElement));
         }
       });
     }
 
     // Keyboard shortcuts
     const handleKeydown = (e) => {
-      // ESC key to close modal
-      if (e.key === 'Escape' && onClose) {
-        onClose();
-      }
+      // ESC key is handled by Bootstrap
       
       // Enter key to proceed (when not in textarea)
       if (e.key === 'Enter' && !e.target.matches('textarea')) {
         e.preventDefault();
         e.stopPropagation();
         if (nextBtn && onNext) {
-          const formData = this.getFormData(element);
-          const isValid = this.validateForm(element);
+          const formData = this.getFormData(modalElement);
+          const isValid = this.validateForm(modalElement);
           if (isValid) {
             onNext(formData);
           }
@@ -392,12 +412,7 @@ class AddFrameworkModal {
       }
     };
 
-    document.addEventListener('keydown', handleKeydown);
-
-    // Store cleanup function
-    element._cleanup = () => {
-      document.removeEventListener('keydown', handleKeydown);
-    };
+    modalElement.addEventListener('keydown', handleKeydown);
   }
 
   bindControlItemEvents(element, onFormChange) {
@@ -470,34 +485,38 @@ class AddFrameworkModal {
   updateStep(newStep) {
     this.currentStep = newStep;
     
-    const element = this.container.querySelector('.modal-container');
+    // Store current form data before destroying
+    const currentFormData = this.getCurrentFormData();
     
-    // Update stepper
-    if (this.stepperInstance) {
-      const stepperContainer = element.querySelector('.stepper-container');
-      if (stepperContainer && stepperContainer.firstElementChild) {
-        this.stepperInstance.updateStep(stepperContainer.firstElementChild, newStep);
+    if (this.bootstrapModal) {
+      const modalElement = document.getElementById('addFrameworkModal');
+      if (modalElement) {
+        // Set up one-time listener for when modal is fully hidden
+        const handleModalHidden = () => {
+          // Clean up the old modal
+          modalElement.remove();
+          
+          // Create new modal with updated step
+          this.render(this.container, this.callbacks);
+          
+          // Restore form data if going back to step 1
+          if (newStep === 1 && Object.keys(currentFormData).length > 0) {
+            // Small delay to ensure modal is fully rendered
+            setTimeout(() => {
+              this.setFormData(currentFormData);
+            }, 50);
+          }
+        };
+        
+        // Add event listener
+        modalElement.addEventListener('hidden.bs.modal', handleModalHidden, { once: true });
+        
+        // Hide the modal (this will trigger the hidden.bs.modal event)
+        this.bootstrapModal.hide();
       }
-    }
-    
-    // Update the entire modal content
-    const newContent = this.getTemplate(newStep);
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = newContent;
-    const newModalContainer = tempDiv.querySelector('.modal-container');
-    
-    // Replace the content
-    element.innerHTML = newModalContainer.innerHTML;
-    
-    // Re-bind events
-    this.setupEventListeners();
-    
-    // Re-create stepper
-    this.createStepper(element, newStep);
-    
-    // Re-initialize Lucide icons
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
+    } else {
+      // Fallback if no bootstrap modal exists
+      this.render(this.container, this.callbacks);
     }
   }
 
@@ -522,7 +541,9 @@ class AddFrameworkModal {
   }
 
   setFormData(data) {
-    const element = this.container.querySelector('.modal-container');
+    const element = document.getElementById('addFrameworkModal');
+    if (!element) return;
+    
     Object.keys(data).forEach(key => {
       const input = element.querySelector(`[name="${key}"]`);
       if (input) {
@@ -539,51 +560,47 @@ class AddFrameworkModal {
     this.container = container;
     this.callbacks = callbacks;
     
-    const modalElement = document.createElement('div');
-    modalElement.className = 'container-fluid d-flex align-items-center justify-content-center min-vh-100 bg-light';
-    modalElement.innerHTML = this.getTemplate(this.currentStep);
+    // Create modal HTML
+    const modalHTML = this.getTemplate(this.currentStep);
     
-    const modalContainer = modalElement.querySelector('.modal-container');
-    modalContainer._callbacks = callbacks;
+    // Add modal to document body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
     
-    if (container) {
-      container.appendChild(modalElement);
-      this.container = container;
-      
-      // Setup events
-      this.setupEventListeners();
-      
-      // Create stepper
-      this.createStepper(modalContainer, this.currentStep);
-      
-      // Initialize Lucide icons
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-      
-      // Smooth entrance animation
-      modalContainer.style.opacity = '0';
-      modalContainer.style.transform = 'scale(0.95)';
-      
-      setTimeout(() => {
-        modalContainer.style.transition = 'all 0.3s ease';
-        modalContainer.style.opacity = '1';
-        modalContainer.style.transform = 'scale(1)';
-      }, 10);
+    const modalElement = document.getElementById('addFrameworkModal');
+    
+    // Initialize Bootstrap Modal
+    this.bootstrapModal = new BootstrapModal(modalElement, {
+      backdrop: 'static',
+      keyboard: true,
+      focus: false  // Disable automatic focus management to prevent errors
+    });
+    
+    // Setup events
+    this.setupEventListeners();
+    
+    // Create stepper
+    this.createStepper(modalElement, this.currentStep);
+    
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
     }
+    
+    // Show the modal
+    this.bootstrapModal.show();
     
     return modalElement;
   }
 
   destroy() {
-    if (this.container) {
-      const element = this.container.querySelector('.modal-container');
-      if (element && element._cleanup) {
-        element._cleanup();
-      }
-      if (this.container.firstChild) {
-        this.container.removeChild(this.container.firstChild);
-      }
+    if (this.bootstrapModal) {
+      this.bootstrapModal.dispose();
+      this.bootstrapModal = null;
+    }
+    
+    const modalElement = document.getElementById('addFrameworkModal');
+    if (modalElement) {
+      modalElement.remove();
     }
   }
 
@@ -592,14 +609,14 @@ class AddFrameworkModal {
   }
 
   getCurrentFormData() {
-    if (!this.container) return {};
-    const element = this.container.querySelector('.modal-container');
+    const element = document.getElementById('addFrameworkModal');
+    if (!element) return {};
     return this.getFormData(element);
   }
 
   validateCurrentForm() {
-    if (!this.container) return false;
-    const element = this.container.querySelector('.modal-container');
+    const element = document.getElementById('addFrameworkModal');
+    if (!element) return false;
     return this.validateForm(element);
   }
 }
