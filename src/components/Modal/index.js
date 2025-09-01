@@ -1,5 +1,6 @@
 import Stepper from "../Stepper";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./modal.scss";
 import { Modal as BootstrapModal } from "bootstrap";
 import getStep1Content from "./partials/step1";
 import getStep2Content from "./partials/step2";
@@ -31,7 +32,7 @@ class AddFrameworkModal {
       subtitle = "Please fill in the details of he new framework.",
       step = "1/3",
       currentStep = 1,
-      totalSteps = 3,
+      totalSteps = 2,
       infoText = "You can 1 Enterprice Framework license available.",
     } = modalData;
 
@@ -138,7 +139,7 @@ class AddFrameworkModal {
 
     // Back button
     const backBtn = modalElement.querySelector(".btn-back");
-    if (backBtn && onBack) {
+    if (backBtn) {
       backBtn.addEventListener("click", () => {
         onBack(this.currentStep);
       });

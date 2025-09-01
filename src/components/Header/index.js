@@ -13,14 +13,14 @@ export const Header = () => {
           </div>
 
           <div class="header-actions">
-            <button class="btn btn-help">
+            <button class="custom-btn btn-help">
               <img class="btn-icon" src="/assets/images/frame-1013-1.svg" alt="Help icon" />
               <span>Help</span>
             </button>
-            <button class="btn btn-primary" id="open-create-framework-modal">
-              <img class="btn-icon" src="/assets/images/frame-1013.svg" alt="Add icon" />
+            <button class="custom-btn btn-primary" id="open-create-framework-modal">
+              <img class="custom-btn-icon" src="/assets/images/frame-1013.svg" alt="Add icon" />
               <span>New Custom Framework</span>
-              <div class="btn-badge">1/3</div>
+              <div class="custom-btn-badge">1/3</div>
             </button>
           </div>
         </div>

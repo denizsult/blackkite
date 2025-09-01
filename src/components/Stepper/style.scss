@@ -1,8 +1,8 @@
 // Stepper Component Styles
+@import "../../scss/variables.scss";
+
 .progress-steps {
   height: 77px;
-  margin-bottom: 16px;
-  position: relative;
 
   .step-container {
     position: relative;
@@ -12,96 +12,65 @@
 
   .step {
     position: absolute;
-    top: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
+    top: 0;
     gap: 4px;
-    transition: all 0.3s ease;
 
     &:first-child {
       left: 0;
     }
 
-    &:last-child {
+    &.last-step {
       right: 0;
-    }
-
-    &:nth-child(2) {
-      right: 0;
+      align-items: end;
     }
 
     .step-circle {
       width: 36px;
       height: 36px;
       border-radius: 18px;
-      border: 1px solid $gray-300;
+      border: 1px solid $primarygray-300;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: $white;
+      background: $universalwhite;
       position: relative;
-      transition: all 0.3s ease;
 
       .step-number {
         font-size: 14px;
         font-weight: 600;
-        color: $gray-600;
+        color: $primarygray-600;
         z-index: 2;
-        transition: color 0.3s ease;
       }
     }
 
     .step-label {
       font-size: 14px;
-      color: $gray-900;
+      color: $primarygray-900;
       white-space: nowrap;
-      transition: color 0.3s ease;
     }
 
     // Active step styling
     &.active {
       .step-circle {
-        border-color: $brand-color;
+        border-color: $brandbrand;
 
+        /* innner circle */
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           width: 30px;
           height: 30px;
-          background: $brand-color;
+          background: $brandbrand;
           border-radius: 15px;
           top: 2px;
           left: 2px;
-          transition: all 0.3s ease;
         }
-
         .step-number {
-          color: $white;
-          z-index: 3;
+          color: $universalwhite;
         }
-      }
-
-      .step-label {
-        color: $brand-color;
-        font-weight: 500;
-      }
-    }
-
-    // Completed step styling
-    &.completed {
-      .step-circle {
-        border-color: $brand-color;
-        background: $brand-color;
-
-        .step-number {
-          color: $white;
-        }
-      }
-
-      .step-label {
-        color: $brand-color;
-        font-weight: 500;
       }
     }
   }
@@ -112,28 +81,10 @@
     left: 52px;
     right: 52px;
     height: 2px;
-    background: $gray-400;
+    background: $primarygray-400;
     border-radius: 1px;
-    transition: all 0.3s ease;
-
     &.progress-active {
-      background: $brand-color;
-    }
-  }
-}
-
-// Responsive Design for Stepper
-@media (max-width: 768px) {
-  .progress-steps {
-    .step {
-      &:last-child {
-        right: 0;
-      }
-    }
-
-    .progress-line {
-      left: 36px;
-      right: 36px;
+      background: $brandbrand;
     }
   }
 }

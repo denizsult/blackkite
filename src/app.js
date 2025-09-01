@@ -19,7 +19,7 @@ async function App() {
             </div>
           </div>
   
-           ${EmptyFrameworkState('empty')}
+           ${EmptyFrameworkState("empty")}
         </div>
       </main>
     </div>
@@ -36,6 +36,7 @@ async function App() {
 function initializeApp(rootNode) {
   const mainContainerDOM = rootNode.querySelector("#main-container");
   const frameworksListDOM = rootNode.querySelector("#frameworks-grid");
+
   // Initialize modal instance
   let modal = null;
   let currentDataTable = null;
@@ -84,29 +85,17 @@ function initializeApp(rootNode) {
     }
   }
 
-  // Update detail panel
-  function updateDetailPanel(framework, rootNode) {
-    const detailPanel = rootNode.querySelector(".empty-framework-state");
-
-    detailPanel.classList.remove("empty");
-
-    detailPanel.innerHTML = `
-      <div id="framework-controls" class="framework-controls"></div>
-    `;
-  }
-
   rootNode
     .querySelector("#open-create-framework-modal")
     .addEventListener("click", () => {
- 
       // Remove existing modal if any
       if (modal) {
         modal.destroy();
       }
-      
+
       // Create new modal instance
       modal = new Modal();
-      
+
       // Render the modal
       modal.render(document.body, {
         onClose: () => {
@@ -128,12 +117,14 @@ function initializeApp(rootNode) {
               controls: formData.controls || [],
               // Add other properties as needed
             };
-            
+
             // Dispatch the addFramework event
-            window.dispatchEvent(new CustomEvent('addFramework', {
-              detail: newFramework
-            }));
-            
+            window.dispatchEvent(
+              new CustomEvent("addFramework", {
+                detail: newFramework,
+              })
+            );
+
             // Close modal
             if (modal) {
               modal.destroy();
@@ -151,9 +142,20 @@ function initializeApp(rootNode) {
             modal.destroy();
             modal = null;
           }
-        }
+        },
       });
     });
+
+  // Update detail panel
+  function updateDetailPanel(framework, rootNode) {
+    const detailPanel = rootNode.querySelector(".empty-framework-state");
+
+    detailPanel.classList.remove("empty");
+
+    detailPanel.innerHTML = `
+      <div id="framework-controls" class="framework-controls"></div>
+    `;
+  }
 
   // Listen for new framework events
   window.addEventListener("addFramework", (e) => {

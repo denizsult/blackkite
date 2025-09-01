@@ -99,7 +99,7 @@ body {
   gap: 4px;
 }
 
-.btn {
+.custom-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -131,11 +131,11 @@ body {
   }
 }
 
-.btn-icon {
+.custom-btn-icon {
   flex-shrink: 0;
 }
 
-.btn-badge {
+.custom-btn-badge {
   background-color: $universalwhite;
   color: $brandbrand;
   padding: 0 4px;

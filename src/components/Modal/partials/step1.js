@@ -1,7 +1,7 @@
 const getStep1Content = (infoText) => {
   return `
     <!-- Info Alert -->
-    <div class="alert alert-info-custom d-flex align-items-start">
+    <div class="alert alert-info-custom">
       <div class="alert-text">
         ${infoText}
       </div>
