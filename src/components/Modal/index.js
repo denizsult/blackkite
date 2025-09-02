@@ -5,6 +5,7 @@ import { Modal as BootstrapModal } from "bootstrap";
 import getStep1Content from "./partials/step1";
 import getStep2Content, { initializeStep2 } from "./partials/step2";
 import iconPlusImg from '../../../public/assets/images/icon-plus.svg';
+import modalCloseImg from '../../../public/assets/images/modal-close.svg';
 
 // Global error handler to catch Bootstrap focus errors
 let errorHandlerAdded = false;
@@ -80,7 +81,7 @@ class AddFrameworkModal {
     }</span>
                 </div>
                 <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                  <i data-lucide="x"></i>
+                  <img src="${modalCloseImg}" alt="Close" />
                 </button>
               </div>
               <div class="modal-subtitle">

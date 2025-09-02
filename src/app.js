@@ -85,24 +85,26 @@ function initializeApp(rootNode) {
   }
 
   rootNode
-    .querySelector(".open-create-framework-modal")
-    .addEventListener("click", () => {
-      // Remove existing modal if any
-      if (modal) {
-        modal.destroy();
-      }
+    .querySelectorAll(".open-create-framework-modal")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        // Remove existing modal if any
+        if (modal) {
+          modal.destroy();
+        }
 
-      // Create new modal instance
-      modal = new AddFrameworkModal();
+        // Create new modal instance
+        modal = new AddFrameworkModal();
 
-      // Render the modal
-      modal.render(document.body, {
-        onClose: () => {
-          if (modal) {
-            modal.destroy();
-            modal = null;
-          }
-        },
+        // Render the modal
+        modal.render(document.body, {
+          onClose: () => {
+            if (modal) {
+              modal.destroy();
+              modal = null;
+            }
+          },
+        });
       });
     });
 
